@@ -5,8 +5,8 @@ USER root
 RUN microdnf install -y tar gzip make which gcc gcc-c++ cyrus-sasl-lib findutils git
 
 # install platform specific go version
-RUN curl -O -J  https://dl.google.com/go/go1.22.5.linux-${TARGETARCH}.tar.gz
-RUN tar -C /usr/local -xzf go1.22.5.linux-${TARGETARCH}.tar.gz
+RUN curl -O -J  https://dl.google.com/go/go1.22.7.linux-${TARGETARCH}.tar.gz
+RUN tar -C /usr/local -xzf go1.22.7.linux-${TARGETARCH}.tar.gz
 RUN ln -s /usr/local/go/bin/go /usr/local/bin/go
 
 WORKDIR /workspace
@@ -24,9 +24,10 @@ COPY main.go Makefile ./
 ARG VERSION
 RUN VERSION=${VERSION} make build
 
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.10-1086
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
 COPY --from=builder /workspace/bin/inventory-api /usr/local/bin/
+RUN microdnf update -y && microdnf clean all
 
 EXPOSE 8081
 EXPOSE 9081
