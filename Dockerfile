@@ -1,12 +1,12 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.10-1086 AS builder
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest AS builder
 
 ARG TARGETARCH
 USER root
 RUN microdnf install -y tar gzip make which gcc gcc-c++ cyrus-sasl-lib findutils git
 
 # install platform specific go version
-RUN curl -O -J  https://dl.google.com/go/go1.22.7.linux-${TARGETARCH}.tar.gz
-RUN tar -C /usr/local -xzf go1.22.7.linux-${TARGETARCH}.tar.gz
+RUN curl -O -J  https://dl.google.com/go/go1.23.6.linux-${TARGETARCH}.tar.gz
+RUN tar -C /usr/local -xzf go1.23.6.linux-${TARGETARCH}.tar.gz
 RUN ln -s /usr/local/go/bin/go /usr/local/bin/go
 
 WORKDIR /workspace
